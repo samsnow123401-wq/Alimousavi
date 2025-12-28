@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ali's Portfolio</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<style>
+:root{
+  --bg:#0f0f0f;
+  --text:#fff;
+  --card:#1a1a1a;
+  --accent:#ffb400;
+  --accent-hover:#ffca1a;
+  --transition-speed:.3s;
+}
+body.light{
+  --bg:#f4f4f4;
+  --text:#111;
+  --card:#fff;
+}
+
+*{box-sizing:border-box;}
+body{
+  margin:0;
+  font-family:'Poppins',sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  transition:var(--transition-speed);
+  scroll-behavior:smooth;
+  overflow-x:hidden;
+  text-align:center;
+}
+
+/* THEME TOGGLE */
+.theme-toggle{
+  position:fixed;
+  top:20px;
+  left:20px;
+  background:var(--card);
+  color:var(--text);
+  padding:10px 14px;
+  border-radius:50%;
+  cursor:pointer;
+  z-index:200;
+  transition:var(--transition-speed);
+}
+
+/* SIDEBAR */
+.sidebar{
+  position:fixed;
+  right:20px;
+  top:50%;
+  transform:translateY(-50%);
+  background:var(--card);
+  padding:12px;
+  border-radius:40px;
+  z-index:150;
+  transition:var(--transition-speed);
+}
+.sidebar a{
+  width:45px;height:45px;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  margin:10px 0;
+  color:var(--text);
+  border-radius:50%;
+  transition:var(--transition-speed);
+}
+.sidebar a.active,
+.sidebar a:hover{
+  background:var(--accent);
+  color:#000;
+}
+
+/* HAMBURGER */
+.hamburger{
+  display:none;
+  position:fixed;
+  top:25px;
+  right:25px;
+  z-index:200;
+  cursor:pointer;
+}
+.hamburger span{
+  display:block;
+  width:25px;height:3px;
+  background:var(--text);
+  margin:5px 0;
+  transition:var(--transition-speed);
+}
+
+/* SECTIONS */
+section, header{
+  min-height:100vh;
+  padding:80px 20px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  text-align:center;
+  transition:var(--transition-speed);
+  position:relative;
+  overflow:hidden;
+}
+
+/* HERO */
+.hero{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:20px;
+  opacity:0;
+  transform:scale(0.95);
+  transition:all 1s ease;
+}
+.hero.show{
+  opacity:1;
+  transform:scale(1);
+}
+.hero .image-box{
+  padding:20px;
+  border-radius:30px;
+  background:linear-gradient(135deg,var(--accent),orange);
+  box-shadow:0 0 50px rgba(255,180,0,.5);
+  transition:0.5s;
+  z-index:2;
+}
+.hero .image-box:hover{
+  box-shadow:0 0 90px rgba(255,180,0,.7);
+}
+.hero .image-box img{
+  width:350px;
+  border-radius:20px;
+  transition:transform 0.5s;
+}
+.hero .image-box:hover img{
+  transform:scale(1.05) rotate(-1deg);
+}
+.hero h1{
+  font-size:56px;
+  font-weight:700;
+  overflow:hidden;
+}
+.hero h1 span{
+  color:var(--accent);
+}
+.hero p{
+  font-size:20px;
+  font-weight:500;
+  opacity:0;
+  transform:translateY(20px);
+  transition:0.8s;
+}
+.hero .btn{
+  display:inline-block;
+  margin-top:25px;
+  padding:18px 36px;
+  background:linear-gradient(90deg,var(--accent),orange);
+  color:#000;
+  border-radius:40px;
+  font-weight:600;
+  text-decoration:none;
+  position:relative;
+  overflow:hidden;
+  cursor:pointer;
+  opacity:0;
+  transform:scale(0.8);
+  transition:0.5s;
+}
+.hero .btn::after{
+  content:"";
+  position:absolute;
+  width:0;height:0;
+  background:rgba(255,255,255,.4);
+  border-radius:50%;
+  top:50%;left:50%;
+  transform:translate(-50%,-50%);
+  transition:.5s;
+}
+.hero .btn:hover::after{width:200%;height:200%;}
+.hero .btn:hover{
+  background:linear-gradient(90deg,orange,var(--accent));
+  color:#000;
+  transform:scale(1.05);
+}
+
+/* PARTICLES */
+.particle{
+  position:absolute;
+  border-radius:50%;
+  background:rgba(255,180,0,0.6);
+  pointer-events:none;
+  animation:float linear infinite;
+}
+@keyframes float{
+  0%{transform:translateY(0) translateX(0);}
+  50%{transform:translateY(-20px) translateX(10px);}
+  100%{transform:translateY(0) translateX(0);}
+}
+
+/* ABOUT */
+.about{
+  max-width:800px;
+  line-height:1.8;
+  font-weight:500;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  text-align:center;
+  height:80vh; /* مرکز عمودی */
+  margin:0 auto;
+  opacity:0;
+  transition:0.8s;
+}
+.about.show{
+  opacity:1;
+}
+
+/* SKILLS */
+.skills{width:100%;max-width:600px;text-align:center;}
+.skill{
+  margin-bottom:25px;
+  font-weight:500;
+  opacity:0;
+  transform:translateY(20px);
+  transition:0.5s;
+  cursor:pointer;
+}
+.skill:hover .bar-fill{
+  background:linear-gradient(90deg,orange,var(--accent));
+  box-shadow:0 0 20px rgba(255,180,0,0.7);
+}
+.bar{
+  height:12px;
+  background:#444;
+  border-radius:20px;
+  overflow:hidden;
+  margin-top:5px;
+}
+.bar-fill{
+  height:100%;
+  width:0;
+  background:linear-gradient(90deg,var(--accent),orange);
+  box-shadow:0 0 15px rgba(255,180,0,0.5);
+  transition:1s;
+}
+
+/* CONTACT */
+.contact-form{
+  max-width:600px;
+  width:100%;
+  display:flex;
+  flex-direction:column;
+  gap:15px;
+  transform:translateY(30px);
+  opacity:0;
+  transition:0.8s;
+}
+.contact-form.show{
+  transform:translateY(0);
+  opacity:1;
+}
+.contact-form input, .contact-form textarea{
+  padding:14px;
+  border-radius:10px;
+  border:none;
+  background:var(--card);
+  color:var(--text);
+  font-size:16px;
+  transition:0.3s;
+}
+.contact-form input:focus, .contact-form textarea:focus{
+  outline:none;
+  box-shadow:0 0 10px var(--accent);
+}
+.contact-form button{
+  padding:14px;
+  border:none;
+  border-radius:40px;
+  background:var(--accent);
+  color:#000;
+  font-weight:600;
+  cursor:pointer;
+  transition:0.3s;
+}
+.contact-form button:hover{
+  background:var(--accent-hover);
+  transform:scale(1.05);
+}
+
+/* MOBILE */
+@media(max-width:768px){
+  .hero .image-box img{width:250px;}
+  .hero h1{font-size:40px;}
+  .sidebar{right:-80px;}
+  .sidebar.show{right:20px;}
+  .hamburger{display:block;}
+  .about{height:auto; padding:60px 20px;}
+  .skills{padding:0 10px;}
+  .contact-form{padding:0 10px;}
+}
+</style>
+</head>
+<body>
+
+<div class="theme-toggle" onclick="toggleTheme()">🌙</div>
+
+<div class="hamburger" onclick="toggleMenu()">
+  <span></span><span></span><span></span>
+</div>
+
+<div class="sidebar">
+  <a href="#home" class="nav active"><i class="fa fa-house"></i></a>
+  <a href="#about" class="nav"><i class="fa fa-user"></i></a>
+  <a href="#skills" class="nav"><i class="fa fa-code"></i></a>
+  <a href="#contact" class="nav"><i class="fa fa-envelope"></i></a>
+</div>
+
+<header id="home" class="hero">
+  <div class="image-box">
+    <img src="me.jpg" alt="Ali's Picture" loading="lazy">
+  </div>
+  <div class="content">
+    <h1 id="hero-title"> Ali <span>  Mousavi </span></h1>
+    <p id="hero-subtitle">Junior Web Developer & Math Student</p>
+    <a href="#skills" class="btn" id="hero-btn">View My Skills</a>
+  </div>
+</header>
+
+<section id="about" class="about">
+  <h1>About Me</h1>
+  <p>Hello! I'm Ali, a junior web developer and math student. I enjoy problem-solving, but to be honest,</p>
+  <p>I really like playing computer games and reading romance novels.</p>
+</section>
+
+<section id="skills">
+  <h1>Skills</h1>
+  <div class="skills">
+    <div class="skill">
+      PYTHON
+      <div class="bar"><div class="bar-fill" data-w="20%"></div></div>
+    </div>
+    <div class="skill">
+      JAVASCRIPT
+      <div class="bar"><div class="bar-fill" data-w="00%"></div></div>
+    </div>
+    <div class="skill">
+      HTML&CSS
+      <div class="bar"><div class="bar-fill" data-w="01%"></div></div>
+    </div>
+  </div>
+</section>
+
+<section id="contact">
+  <h1>Contact Me</h1>
+  <form class="contact-form" onsubmit="handleSubmit(event)">
+    <input type="text" placeholder="Your Name" required>
+    <input type="email" placeholder="Your Email" required>
+    <textarea placeholder="Your Message" rows="5" required></textarea>
+    <button type="submit">Send Message</button>
+  </form>
+</section>
+
+<script>
+function toggleTheme(){
+  document.body.classList.toggle("light");
+  localStorage.setItem("theme", document.body.classList.contains("light") ? "light" : "dark");
+}
+if(localStorage.getItem("theme")==="light") document.body.classList.add("light");
+
+function toggleMenu(){ document.querySelector(".sidebar").classList.toggle("show"); }
+
+const navs=document.querySelectorAll(".nav");
+const secs=document.querySelectorAll("section, header");
+window.addEventListener("scroll",()=>{
+  let cur="";
+  secs.forEach(s=>scrollY>=s.offsetTop-200&&(cur=s.id));
+  navs.forEach(n=>n.classList.toggle("active",n.getAttribute("href")==="#"+cur));
+});
+
+const observer=new IntersectionObserver(entries=>{
+  entries.forEach(entry=>{
+    if(entry.isIntersecting){
+      entry.target.classList.add("show");
+      if(entry.target.classList.contains("bar-fill")){
+        entry.target.style.width=entry.target.dataset.w;
+      }
+      if(entry.target.classList.contains("skill")){
+        entry.target.style.opacity="1";
+        entry.target.style.transform="translateY(0)";
+      }
+    }
+  });
+},{threshold:0.2});
+document.querySelectorAll(".hero, .about, .contact-form, .skill, .bar-fill").forEach(el=>observer.observe(el));
+
+function handleSubmit(e){
+  e.preventDefault();
+  alert("Your message has been sent successfully!");
+  e.target.reset();
+}
+
+function createParticles(){
+  const hero=document.querySelector('.hero');
+  for(let i=0;i<40;i++){
+    const p=document.createElement('div');
+    p.classList.add('particle');
+    let size=Math.random()*6+3;
+    p.style.width=size+'px';
+    p.style.height=size+'px';
+    p.style.top=Math.random()*100+'%';
+    p.style.left=Math.random()*100+'%';
+    p.style.animationDuration=(Math.random()*3+2)+'s';
+    p.style.opacity=Math.random();
+    hero.appendChild(p);
+  }
+}
+createParticles();
+
+function animateHeroText(){
+  const title=document.getElementById('hero-title');
+  const subtitle=document.getElementById('hero-subtitle');
+  const btn=document.getElementById('hero-btn');
+  const text=title.textContent;
+  title.textContent='';
+  [...text].forEach((char,i)=>{
+    const span=document.createElement('span');
+    span.textContent=char;
+    span.style.opacity='0';
+    span.style.display='inline-block';
+    span.style.transform='translateY(20px)';
+    span.style.transition=`all 0.5s ease ${i*0.05}s`;
+    title.appendChild(span);
+    setTimeout(()=>{span.style.opacity='1'; span.style.transform='translateY(0)';},50);
+  });
+  setTimeout(()=>{
+    subtitle.style.opacity='1';
+    subtitle.style.transform='translateY(0)';
+    btn.style.opacity='1';
+    btn.style.transform='scale(1)';
+  },text.length*50+200);
+}
+window.addEventListener('load',animateHeroText);
+</script>
+
+</body>
+</html>
